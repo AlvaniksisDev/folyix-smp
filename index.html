@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1511">
+  <meta name="description" content="FOLYIX SMP — приватный сюжетный Minecraft SMP. Один сезон, один мир, настоящее сообщество. Вход по заявкам.">
+  <title>FOLYIX SMP — твоя глава в общей истории</title>
+
+  <!-- Шрифты: пиксельный для акцентов и мягкий читаемый для текста -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #f4faf5;
+      --white: #ffffff;
+      --ink: #1b3b2b;
+      --muted: #607767;
+      --green: #2e8b57;
+      --grass: #4caf50;
+      --sage: #a5d6a7;
+      --mint: #dff1e2;
+      --sun: #ffd54f;
+      --sun-soft: #fff3c4;
+      --line: rgba(46, 139, 87, .13);
+      --shadow: 0 18px 55px rgba(39, 91, 57, .10);
+      --shadow-soft: 0 9px 28px rgba(39, 91, 57, .08);
+      --radius-xl: 30px;
+      --radius-lg: 23px;
+      --radius-md: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: 'Nunito', sans-serif;
+      background:
+        radial-gradient(ellipse at 12% 5%, rgba(255, 213, 79, .24), transparent 27%),
+        radial-gradient(ellipse at 90% 18%, rgba(165, 214, 167, .24), transparent 30%),
+        linear-gradient(180deg, #f7fcf7 0%, #f1f8f2 45%, #f8fbf7 100%);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: .34;
+      background-image: radial-gradient(rgba(46,139,87,.15) .7px, transparent .7px);
+      background-size: 21px 21px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    ::selection { background: #c8edce; color: #183d29; }
+
+    .ambient { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
+    .sun-glow {
+      position: absolute; width: 520px; height: 520px; border-radius: 50%;
+      right: -170px; top: 90px;
+      background: radial-gradient(circle, rgba(255,221,112,.25), rgba(255,221,112,.08) 42%, transparent 70%);
+      filter: blur(10px); animation: sunDrift 14s ease-in-out infinite alternate;
+    }
+    .light-wash {
+      position: absolute; width: 70vw; height: 36vh; left: -18vw; top: 22vh;
+      background: linear-gradient(115deg, transparent, rgba(255,255,255,.6), rgba(207,239,211,.25), transparent);
+      transform: rotate(-18deg); filter: blur(18px); animation: wash 18s ease-in-out infinite alternate;
+    }
+    .ambient-leaf {
+      position: absolute; width: 13px; height: 22px; border-radius: 100% 0 100% 0;
+      background: rgba(76,175,80,.15); transform: rotate(35deg); animation: driftLeaf 16s linear infinite;
+    }
+    .ambient-leaf:nth-child(3) { left: 9%; top: 65%; animation-delay: -4s; }
+    .ambient-leaf:nth-child(4) { left: 74%; top: 8%; animation-delay: -9s; transform: scale(.7) rotate(70deg); }
+    .ambient-leaf:nth-child(5) { left: 88%; top: 70%; animation-delay: -12s; transform: scale(1.2) rotate(15deg); }
+    .ambient-leaf:nth-child(6) { left: 36%; top: 88%; animation-delay: -7s; transform: scale(.6) rotate(90deg); }
+    .ambient-leaf:nth-child(7) { left: 58%; top: 39%; animation-delay: -2s; transform: scale(.8) rotate(45deg); }
+    @keyframes sunDrift { to { transform: translate(-65px, 35px) scale(1.13); } }
+    @keyframes wash { to { transform: translate(18vw, 12vh) rotate(-10deg); opacity: .55; } }
+    @keyframes driftLeaf { 0% { translate: 0 0; rotate: 0deg; opacity: 0; } 15% { opacity: .8; } 85% { opacity: .6; } 100% { translate: 85px -170px; rotate: 220deg; opacity: 0; } }
+
+    .container { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .pixel { font-family: 'Silkscreen', monospace; letter-spacing: -.055em; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; padding: 9px 13px;
+      background: rgba(255,255,255,.78); border: 1px solid rgba(46,139,87,.14);
+      border-radius: 999px; color: var(--green); font-size: 11px; font-weight: 900;
+      letter-spacing: .11em; text-transform: uppercase; box-shadow: 0 5px 18px rgba(46,139,87,.06);
+    }
+    .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--grass); box-shadow: 0 0 0 5px rgba(76,175,80,.12); }
+    .section { padding: 100px 0; position: relative; }
+    .section-heading { max-width: 700px; margin: 0 auto 46px; text-align: center; }
+    .section-heading h2 { margin: 17px 0 13px; font-size: clamp(27px, 4vw, 43px); line-height: 1.2; letter-spacing: -.045em; }
+    .section-heading p { color: var(--muted); margin: 0; font-size: 17px; line-height: 1.75; }
+    .pixel-kicker { color: #79a583; font-family: 'Silkscreen', monospace; font-size: 10px; letter-spacing: .02em; }
+
+    /* Шапка */
+    .topbar { position: sticky; top: 0; z-index: 50; padding: 13px 0; background: rgba(246,251,246,.76); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(46,139,87,.09); }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 1000; letter-spacing: .02em; }
+    .brand-mark { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 13px; background: linear-gradient(145deg, #e1f4e3, #fff5ce); box-shadow: inset 0 0 0 1px rgba(46,139,87,.13); }
+    .brand-mark span { font-family: 'Silkscreen'; font-size: 15px; color: var(--green); }
+    .brand-name { font-family: 'Silkscreen'; font-size: 14px; color: var(--ink); }
+    .nav-links { display: flex; align-items: center; gap: 27px; color: #587161; font-size: 14px; font-weight: 800; }
+    .nav-links a { transition: color .2s, transform .2s; }
+    .nav-links a:hover { color: var(--green); transform: translateY(-1px); }
+    .nav-cta { display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px; border: 0; border-radius: 13px; background: var(--green); color: white; font-weight: 900; box-shadow: 0 8px 18px rgba(46,139,87,.18); transition: transform .2s, box-shadow .2s; }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 23px rgba(46,139,87,.24); }
+    .menu-toggle { display: none; border: 0; background: #e8f5e9; color: var(--green); width: 42px; height: 42px; border-radius: 13px; font-size: 20px; }
+
+    /* Hero */
+    .hero { min-height: 690px; display: grid; align-items: center; padding: 76px 0 84px; position: relative; }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 46px; align-items: center; }
+    .hero-copy { position: relative; z-index: 2; }
+    .hero-copy h1 { margin: 24px 0 18px; font-size: clamp(42px, 7vw, 78px); line-height: 1.06; letter-spacing: -.075em; color: var(--ink); }
+    .hero-copy h1 .green-word { color: var(--green); text-shadow: 0 4px 0 rgba(165,214,167,.35); }
+    .hero-copy p { max-width: 610px; color: #587363; font-size: 18px; line-height: 1.8; margin: 0 0 25px; }
+    .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+    .hero-pill { padding: 8px 11px; border: 1px solid rgba(46,139,87,.13); background: rgba(255,255,255,.74); border-radius: 999px; color: #45644f; font-size: 10px; font-weight: 1000; letter-spacing: .07em; }
+    .hero-pill strong { color: var(--green); }
+    .button-row { display: flex; flex-wrap: wrap; align-items: center; gap: 13px; }
+    .btn-primary, .btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 15px; padding: 15px 21px; border: 0; font-weight: 1000; transition: transform .2s, box-shadow .2s, background .2s; }
+    .btn-primary { background: linear-gradient(135deg, #3b9a60, #287b4e); color: white; box-shadow: 0 12px 25px rgba(46,139,87,.2); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 17px 30px rgba(46,139,87,.25); }
+    .btn-secondary { color: var(--green); background: rgba(255,255,255,.8); border: 1px solid rgba(46,139,87,.16); }
+    .btn-secondary:hover { transform: translateY(-2px); background: #fff; }
+    .hero-note { margin-top: 22px; display: flex; align-items: center; gap: 10px; color: #789080; font-size: 13px; font-weight: 700; }
+    .hero-note span { font-size: 18px; }
+
+    .hero-art { position: relative; min-height: 460px; display: grid; place-items: center; }
+    .hero-sun { position: absolute; width: 355px; height: 355px; border-radius: 50%; background: radial-gradient(circle, #fff0b3 0%, #ffefbd 35%, rgba(255,239,189,.32) 62%, transparent 72%); filter: blur(2px); animation: sunPulse 7s ease-in-out infinite alternate; }
+    @keyframes sunPulse { to { transform: scale(1.08); opacity: .78; } }
+    .island { position: absolute; width: 410px; height: 180px; bottom: 25px; left: 50%; transform: translateX(-50%) rotate(-5deg); border-radius: 50%; background: linear-gradient(180deg, #8fcf8d 0 17%, #6eb77a 18% 40%, #b8885c 41% 68%, #9b704f 69%); box-shadow: 0 35px 35px rgba(63,111,69,.15); }
+    .island::before { content: ''; position: absolute; inset: -12px 20px auto; height: 48px; border-radius: 50%; background: #b2dfa5; box-shadow: inset 0 -8px 0 rgba(76,175,80,.13); }
+    .island::after { content: ''; position: absolute; width: 110px; height: 42px; border-radius: 50%; left: 70px; bottom: -10px; background: rgba(95,64,43,.2); filter: blur(8px); }
+    .hero-tree { position: absolute; bottom: 170px; width: 16px; height: 92px; background: #916542; border-radius: 8px; z-index: 2; }
+    .hero-tree::before { content: ''; position: absolute; width: 112px; height: 110px; border-radius: 48% 52% 43% 57%; background: linear-gradient(145deg, #78c77b, #398d56); left: -48px; top: -66px; box-shadow: inset -12px -10px 0 rgba(27,91,48,.12), 0 12px 23px rgba(46,139,87,.12); }
+    .hero-tree.tree-one { left: 19%; transform: scale(.8); }
+    .hero-tree.tree-two { right: 17%; bottom: 155px; transform: scale(1.18); }
+    .hero-tree.tree-two::before { background: linear-gradient(145deg, #8bd17c, #4a9e5b); }
+    .floating-cloud { position: absolute; width: 84px; height: 27px; border-radius: 50px; background: rgba(255,255,255,.75); filter: blur(.4px); animation: cloudMove 9s ease-in-out infinite alternate; }
+    .floating-cloud::before, .floating-cloud::after { content: ''; position: absolute; bottom: 4px; border-radius: 50%; background: inherit; }
+    .floating-cloud::before { width: 35px; height: 35px; left: 13px; }
+    .floating-cloud::after { width: 45px; height: 45px; left: 35px; }
+    .cloud-one { top: 65px; left: 3%; }
+    .cloud-two { top: 125px; right: 0; transform: scale(.7); animation-delay: -4s; }
+    @keyframes cloudMove { to { translate: 22px -8px; } }
+    .bee-wrap { position: relative; z-index: 5; width: 218px; height: 228px; display: grid; place-items: center; margin-top: -35px; animation: beeFloat 4s ease-in-out infinite; filter: drop-shadow(0 22px 25px rgba(46,102,61,.16)); }
+    @keyframes beeFloat { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-13px) rotate(2deg); } }
+    #worldBee { width: 100%; height: 100%; overflow: visible; cursor: pointer; outline: none; }
+    #worldBee:focus-visible { filter: drop-shadow(0 0 0.5rem #f4c84f); }
+    .bee-hint { position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); white-space: nowrap; background: white; padding: 8px 13px; border-radius: 999px; font-size: 11px; font-weight: 900; color: #62806b; box-shadow: var(--shadow-soft); }
+    .hero-sticker { position: absolute; z-index: 5; background: white; padding: 11px 14px; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid rgba(46,139,87,.1); font-size: 12px; font-weight: 900; color: #547260; }
+    .hero-sticker b { color: var(--green); }
+    .sticker-a { top: 70px; right: 3%; transform: rotate(5deg); }
+    .sticker-b { bottom: 75px; left: 3%; transform: rotate(-6deg); }
+
+    /* История и ценности */
+    .story-band { background: rgba(255,255,255,.64); border-top: 1px solid rgba(46,139,87,.08); border-bottom: 1px solid rgba(46,139,87,.08); }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+    .story-main { padding: 35px; border-radius: var(--radius-xl); background: linear-gradient(140deg, #e7f5e8, #f9fcf5); border: 1px solid rgba(46,139,87,.1); box-shadow: var(--shadow-soft); position: relative; overflow: hidden; }
+    .story-main::after { content: '✦'; position: absolute; right: 28px; bottom: 8px; font-size: 120px; color: rgba(76,175,80,.08); transform: rotate(12deg); }
+    .story-main h3 { font-size: 29px; margin: 14px 0; letter-spacing: -.04em; }
+    .story-main p { color: #5d7564; line-height: 1.8; font-size: 16px; position: relative; z-index: 1; }
+    .story-side { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    .value-card { background: white; border: 1px solid var(--line); border-radius: 21px; padding: 23px; box-shadow: var(--shadow-soft); }
+    .value-card .value-icon { width: 43px; height: 43px; display: grid; place-items: center; border-radius: 14px; background: #edf8ed; font-size: 21px; margin-bottom: 14px; }
+    .value-card h4 { margin: 0 0 7px; font-size: 16px; }
+    .value-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+
+    /* Сезоны */
+    .season-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; margin-top: 30px; }
+    .season-card { border-radius: 19px; padding: 18px; background: rgba(255,255,255,.78); border: 1px solid var(--line); box-shadow: 0 8px 22px rgba(39,91,57,.05); transition: transform .25s; }
+    .season-card:hover { transform: translateY(-5px); }
+    .season-card .season-symbol { font-size: 24px; margin-bottom: 10px; }
+    .season-card strong { display: block; margin-bottom: 4px; }
+    .season-card small { color: #718776; line-height: 1.5; }
+    .season-year { display: inline-block; padding: 5px 9px; margin-top: 12px; border-radius: 999px; background: #eef7ed; color: var(--green); font-size: 10px; font-weight: 1000; }
+
+    /* Карточки реликвий */
+    .relic-section { background: linear-gradient(180deg, rgba(230,245,231,.48), rgba(255,255,255,.2)); }
+    .relic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 17px; perspective: 1200px; }
+    .relic-card {
+      min-height: 345px; position: relative; overflow: hidden; padding: 22px;
+      border-radius: 24px; border: 1px solid rgba(46,139,87,.13);
+      background: rgba(255,255,255,.86); box-shadow: var(--shadow-soft);
+      transform-style: preserve-3d; transition: box-shadow .25s, border-color .25s;
+      will-change: transform;
+    }
+    .relic-card::before { content: ''; position: absolute; inset: -60% -90%; background: linear-gradient(115deg, transparent 43%, rgba(255,255,255,.72) 49%, rgba(255,232,153,.24) 52%, transparent 59%); transform: translateX(-48%) rotate(14deg); transition: transform .6s ease; pointer-events: none; }
+    .relic-card:hover::before { transform: translateX(46%) rotate(14deg); }
+    .relic-card:hover { box-shadow: 0 22px 42px rgba(39,91,57,.16); border-color: rgba(46,139,87,.25); }
+    .relic-visual { height: 150px; display: grid; place-items: center; border-radius: 18px; margin-bottom: 19px; position: relative; overflow: hidden; transform: translateZ(24px); }
+    .relic-visual::before { content: ''; position: absolute; width: 165px; height: 165px; border-radius: 50%; background: rgba(255,255,255,.38); filter: blur(1px); }
+    .relic-emoji { position: relative; z-index: 1; font-size: 72px; filter: drop-shadow(0 12px 10px rgba(0,0,0,.12)); transform: translateZ(36px); }
+    .relic-card h3 { margin: 0 0 9px; font-size: 19px; letter-spacing: -.03em; transform: translateZ(20px); }
+    .relic-card p { color: #6b806f; font-size: 13px; line-height: 1.65; margin: 0; transform: translateZ(16px); }
+    .relic-label { display: inline-flex; margin-top: 14px; padding: 6px 9px; border-radius: 999px; background: #eef7ee; color: #4d8b5d; font-size: 10px; font-weight: 1000; letter-spacing: .05em; transform: translateZ(15px); }
+    .winter .relic-visual { background: linear-gradient(145deg, #dceef8, #eff8f4); }
+    .spring .relic-visual { background: linear-gradient(145deg, #fae1ed, #f2f8d9); }
+    .autumn .relic-visual { background: linear-gradient(145deg, #f8e5d1, #f4eddd); }
+    .summer .relic-visual { background: linear-gradient(145deg, #d9f1d4, #fff2c7); }
+
+    /* Заявки */
+    .apply-section { padding-top: 90px; }
+    .apply-shell { display: grid; grid-template-columns: .8fr 1.2fr; gap: 26px; align-items: start; }
+    .apply-info { padding: 31px; border-radius: var(--radius-xl); color: white; background: linear-gradient(155deg, #347f50, #276a45); box-shadow: 0 22px 48px rgba(35,105,66,.18); position: sticky; top: 100px; overflow: hidden; }
+    .apply-info::after { content: '✿'; position: absolute; right: -10px; bottom: -42px; color: rgba(255,255,255,.08); font-size: 190px; }
+    .apply-info h3 { font-size: 27px; line-height: 1.2; margin: 17px 0 12px; letter-spacing: -.04em; }
+    .apply-info p { color: rgba(255,255,255,.79); line-height: 1.75; font-size: 14px; }
+    .limit-box { position: relative; z-index: 1; display: flex; align-items: center; gap: 13px; margin-top: 24px; padding: 15px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); border-radius: 16px; }
+    .limit-number { font-family: 'Silkscreen'; font-size: 29px; color: #ffe18b; }
+    .limit-box small { display: block; color: rgba(255,255,255,.78); font-size: 11px; }
+    .apply-rules { position: relative; z-index: 1; margin-top: 23px; display: grid; gap: 12px; font-size: 13px; color: rgba(255,255,255,.88); }
+    .apply-rules span { display: flex; align-items: start; gap: 9px; }
+    .apply-card { background: white; border: 1px solid var(--line); border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow); }
+    .apply-card h3 { margin: 0 0 7px; font-size: 23px; letter-spacing: -.03em; }
+    .form-intro { color: var(--muted); font-size: 13px; line-height: 1.65; margin: 0 0 23px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: #42604c; font-size: 12px; font-weight: 1000; }
+    .field label em { color: #9aaf9d; font-style: normal; font-weight: 700; }
+    .field input, .field textarea, .field select, .lookup-input {
+      width: 100%; border: 1px solid #dcebe0; outline: none; border-radius: 13px; padding: 13px 14px;
+      background: #fbfefb; color: var(--ink); transition: border .2s, box-shadow .2s, background .2s;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus, .lookup-input:focus { border-color: #79bd88; box-shadow: 0 0 0 4px rgba(76,175,80,.1); background: white; }
+    .field textarea { min-height: 100px; resize: vertical; }
+    .field small { color: #8ba091; font-size: 10px; line-height: 1.5; }
+    .privacy-note { margin: 18px 0; padding: 12px 14px; border-radius: 13px; background: #f4f9ef; color: #6b806f; font-size: 11px; line-height: 1.6; }
+    .submit-btn { width: 100%; padding: 15px; }
+    .form-message { display: none; margin-top: 13px; padding: 12px 14px; border-radius: 12px; background: #fff6d9; color: #80671c; font-size: 12px; line-height: 1.55; }
+    .form-message.show { display: block; }
+
+    /* Карточка статуса */
+    .status-panel { display: none; border-radius: 22px; background: linear-gradient(145deg, #f1f9ed, #fffdf1); border: 1px solid rgba(76,175,80,.18); padding: 24px; box-shadow: var(--shadow-soft); }
+    .status-panel.visible { display: block; animation: appear .45s ease both; }
+    @keyframes appear { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .status-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .status-top h3 { margin: 0; font-size: 21px; }
+    .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; font-size: 11px; font-weight: 1000; background: #fff0bd; color: #84661a; }
+    .status-badge.pending { animation: breathe 2.4s ease-in-out infinite; }
+    .status-badge.approved { color: #fff; background: #2e9657; }
+    .status-badge.rejected { background: #f6e6d9; color: #946343; }
+    @keyframes breathe { 50% { box-shadow: 0 0 0 7px rgba(255,213,79,.14); } }
+    .status-copy { color: #667b6b; line-height: 1.7; font-size: 13px; margin: 13px 0 0; }
+    .approved-box { display: none; margin-top: 19px; padding: 18px; border-radius: 16px; background: linear-gradient(135deg, #e0f4e1, #fff7d7); border: 1px solid #cce9cf; }
+    .approved-box.show { display: block; }
+    .approved-box h4 { margin: 0 0 10px; color: #286c42; }
+    .server-ip { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 12px; border-radius: 12px; background: rgba(255,255,255,.75); border: 1px solid rgba(46,139,87,.13); font-family: monospace; font-size: 13px; overflow-wrap: anywhere; }
+    .copy-btn { flex: 0 0 auto; border: 0; border-radius: 9px; padding: 8px 10px; background: var(--green); color: white; font-family: 'Nunito'; font-weight: 900; font-size: 11px; }
+    .pack-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; border-radius: 11px; padding: 10px 13px; background: white; color: var(--green); border: 1px solid #c9e3cd; font-size: 12px; font-weight: 1000; }
+    .status-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 17px; }
+    .status-actions button { padding: 9px 12px; border-radius: 10px; border: 1px solid #d9e9db; background: white; color: #53745d; font-size: 11px; font-weight: 900; }
+    .status-actions .demo-label { width: 100%; color: #9aa99b; font-size: 10px; font-weight: 800; }
+    .reapply-btn { margin-top: 14px; border: 0; border-radius: 11px; background: #fff; color: var(--green); padding: 10px 14px; font-weight: 900; font-size: 12px; }
+
+    /* Проверка статуса */
+    .lookup-box { margin-top: 20px; padding: 19px; border: 1px dashed #bedcc3; border-radius: 18px; background: #fbfefb; }
+    .lookup-box h4 { margin: 0 0 6px; font-size: 15px; }
+    .lookup-box p { color: #829384; font-size: 11px; margin: 0 0 12px; }
+    .lookup-row { display: flex; gap: 9px; }
+    .lookup-row .btn-secondary { padding: 11px 14px; white-space: nowrap; }
+    .lookup-result { margin-top: 12px; display: none; }
+    .lookup-result.show { display: block; }
+
+    /* Футер и секретный росток */
+    footer { padding: 45px 0 32px; background: rgba(232,244,233,.72); border-top: 1px solid rgba(46,139,87,.1); }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 25px; }
+    .footer-brand { display: flex; align-items: center; gap: 12px; }
+    .footer-brand p { margin: 4px 0 0; color: #829487; font-size: 11px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 18px; color: #728575; font-size: 12px; font-weight: 800; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 28px; padding-top: 18px; border-top: 1px solid rgba(46,139,87,.1); color: #91a194; font-size: 10px; }
+    .sprout-secret { position: relative; display: inline-grid; place-items: center; width: 33px; height: 34px; margin-left: 9px; cursor: pointer; vertical-align: middle; transition: transform .35s cubic-bezier(.2,.8,.2,1); outline: none; }
+    .sprout-secret .sprout { font-size: 19px; transform-origin: bottom center; transition: transform .35s; filter: saturate(.8); }
+    .sprout-secret:hover, .sprout-secret:focus-visible { transform: translateY(-8px) scale(1.35); }
+    .sprout-secret:hover .sprout, .sprout-secret:focus-visible .sprout { transform: rotate(-15deg); }
+    .sprout-note { position: absolute; right: 0; bottom: 43px; width: min(280px, 75vw); padding: 15px; border-radius: 15px; background: white; border: 1px solid #dcecdf; color: #58705e; box-shadow: var(--shadow); font-size: 11px; line-height: 1.6; opacity: 0; visibility: hidden; transform: translateY(8px); transition: .25s; z-index: 10; }
+    .sprout-secret:hover .sprout-note, .sprout-secret:focus-visible .sprout-note, .sprout-secret.open .sprout-note { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    /* Частицы клика */
+    .nature-particle { position: fixed; left: 0; top: 0; z-index: 999; pointer-events: none; width: var(--size); height: var(--size); border-radius: var(--shape, 2px); background: var(--color); box-shadow: 0 0 9px color-mix(in srgb, var(--color), transparent 50%); animation: particleFly var(--duration) cubic-bezier(.15,.65,.25,1) forwards; }
+    .nature-particle.leaf { border-radius: 100% 0 100% 0; }
+    .nature-particle.spark { clip-path: polygon(50% 0, 62% 37%, 100% 50%, 62% 63%, 50% 100%, 38% 63%, 0 50%, 38% 37%); }
+    @keyframes particleFly { 0% { transform: translate(0,0) rotate(0) scale(.7); opacity: 0; } 12% { opacity: 1; } 72% { opacity: .85; } 100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(.25); opacity: 0; } }
+
+    /* Мини-ивент с пчёлками и ачивка */
+    .flying-bee { position: fixed; z-index: 998; left: -60px; top: var(--top); font-size: var(--size); pointer-events: none; animation: beeFlight var(--flight) linear forwards; filter: drop-shadow(0 5px 5px rgba(44,102,57,.17)); }
+    @keyframes beeFlight { 0% { transform: translateX(-8vw) translateY(0) rotate(-5deg); } 30% { transform: translateX(35vw) translateY(-26px) rotate(5deg); } 65% { transform: translateX(75vw) translateY(22px) rotate(-4deg); } 100% { transform: translateX(115vw) translateY(-10px) rotate(4deg); } }
+    .joy-bounce { animation: joyBounce .65s ease !important; }
+    @keyframes joyBounce { 0%,100% { transform: translateY(0); } 30% { transform: translateY(-13px) rotate(-1deg); } 55% { transform: translateY(1px) rotate(1deg); } 78% { transform: translateY(-5px); } }
+    .achievement-toast { position: fixed; z-index: 1200; right: 22px; bottom: 22px; max-width: 310px; display: flex; align-items: center; gap: 12px; padding: 14px 17px; border-radius: 17px; background: rgba(255,255,255,.94); border: 1px solid #cfe8d1; box-shadow: 0 18px 45px rgba(35,91,50,.18); transform: translateY(130%); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+    .achievement-toast.show { transform: translateY(0); }
+    .achievement-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; background: #fff3c5; font-size: 22px; }
+    .achievement-toast strong { display: block; font-size: 12px; }
+    .achievement-toast small { color: #7b8e7e; font-size: 10px; }
+
+    /* Письмо */
+    .letter-overlay { position: fixed; inset: 0; z-index: 1300; display: grid; place-items: center; padding: 20px; background: rgba(25,56,36,.34); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: .3s; }
+    .letter-overlay.open { opacity: 1; visibility: visible; }
+    .letter { width: min(560px, 100%); max-height: 85vh; overflow: auto; position: relative; border-radius: 26px; padding: 32px; background: linear-gradient(145deg, #fffef7, #f0faef); box-shadow: 0 25px 80px rgba(20,58,31,.25); border: 1px solid rgba(255,255,255,.9); transform: translateY(20px) scale(.97); transition: .35s; }
+    .letter-overlay.open .letter { transform: translateY(0) scale(1); }
+    .letter .letter-flower { font-size: 32px; }
+    .letter h3 { font-size: 25px; margin: 12px 0; letter-spacing: -.04em; }
+    .letter p { color: #647a67; line-height: 1.8; font-size: 14px; }
+    .letter-sign { font-weight: 1000; color: var(--green); margin-top: 20px; }
+    .close-letter { position: absolute; top: 15px; right: 15px; width: 35px; height: 35px; border: 0; border-radius: 11px; background: #eaf5e9; color: var(--green); font-size: 19px; }
+    .bee-celebrate { animation: beeCelebrate .8s cubic-bezier(.2,.8,.2,1); }
+    @keyframes beeCelebrate { 0%,100% { transform: translateY(0) rotate(0) scale(1); } 35% { transform: translateY(-36px) rotate(-9deg) scale(1.08); } 70% { transform: translateY(5px) rotate(6deg) scale(.98); } }
+
+    /* Маленькие экранчики */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 5px; }
+      .hero-copy { text-align: center; }
+      .hero-copy p { margin-left: auto; margin-right: auto; }
+      .hero-pills, .button-row, .hero-note { justify-content: center; }
+      .hero-art { min-height: 420px; }
+      .relic-grid { grid-template-columns: repeat(2, 1fr); }
+      .apply-shell { grid-template-columns: 1fr; }
+      .apply-info { position: relative; top: auto; }
+    }
+    @media (max-width: 680px) {
+      .container { width: min(100% - 28px, 520px); }
+      .section { padding: 72px 0; }
+      .nav-links { display: none; position: absolute; top: 67px; left: 14px; right: 14px; padding: 17px; border-radius: 18px; background: rgba(255,255,255,.97); box-shadow: var(--shadow); flex-direction: column; align-items: stretch; gap: 14px; }
+      .nav-links.open { display: flex; }
+      .nav-cta { display: none; }
+      .menu-toggle { display: block; }
+      .hero { padding: 55px 0 50px; min-height: auto; }
+      .hero-copy h1 { font-size: clamp(37px, 12vw, 58px); }
+      .hero-copy p { font-size: 15px; }
+      .hero-art { min-height: 350px; transform: scale(.88); margin: -4px 0; }
+      .island { width: 330px; height: 145px; }
+      .hero-sticker { font-size: 10px; padding: 9px 11px; }
+      .sticker-a { top: 42px; right: -2%; }
+      .sticker-b { bottom: 43px; left: -1%; }
+      .story-grid { grid-template-columns: 1fr; }
+      .story-main { padding: 26px; }
+      .story-side { grid-template-columns: 1fr 1fr; }
+      .season-strip { grid-template-columns: 1fr 1fr; }
+      .relic-grid { gap: 11px; }
+      .relic-card { padding: 14px; min-height: 316px; }
+      .relic-visual { height: 115px; }
+      .relic-emoji { font-size: 55px; }
+      .relic-card h3 { font-size: 16px; }
+      .relic-card p { font-size: 11px; }
+      .apply-card { padding: 21px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .lookup-row { flex-direction: column; }
+      .lookup-row .btn-secondary { width: 100%; }
+      .footer-row, .footer-bottom { align-items: flex-start; flex-direction: column; }
+      .footer-links { gap: 12px; }
+      .letter { padding: 25px; }
+      .achievement-toast { right: 12px; bottom: 12px; left: 12px; max-width: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+
+  <style id="folyix-dark-theme">
+    :root {
+      color-scheme: dark;
+      --cream: #0b1511;
+      --white: #14221a;
+      --ink: #e6f1e8;
+      --muted: #a2b8a8;
+      --green: #78d69a;
+      --grass: #83d982;
+      --sage: #365d43;
+      --mint: #1b3325;
+      --sun: #f3ca69;
+      --sun-soft: #3b321e;
+      --line: rgba(142, 211, 157, .17);
+      --shadow: 0 24px 70px rgba(0, 0, 0, .32);
+      --shadow-soft: 0 12px 34px rgba(0, 0, 0, .24);
+    }
+    html { color-scheme: dark; }
+    body {
+      color: var(--ink) !important;
+      background:
+        radial-gradient(ellipse at 12% 3%, rgba(56, 124, 77, .20), transparent 31%),
+        radial-gradient(ellipse at 88% 14%, rgba(181, 139, 58, .12), transparent 27%),
+        radial-gradient(ellipse at 50% 80%, rgba(34, 95, 63, .12), transparent 38%),
+        linear-gradient(180deg, #0b1511 0%, #0d1913 48%, #0a130f 100%) !important;
+    }
+    body::before { opacity: .18 !important; background-image: radial-gradient(rgba(159, 221, 171, .18) .7px, transparent .7px) !important; }
+    ::selection { background: rgba(120, 214, 154, .34); color: #fff; }
+    .ambient .sun-glow { background: radial-gradient(circle, rgba(243, 202, 105, .18), rgba(243, 202, 105, .055) 42%, transparent 70%) !important; }
+    .ambient .light-wash { background: linear-gradient(115deg, transparent, rgba(147, 210, 157, .10), rgba(208, 176, 100, .08), transparent) !important; }
+    .ambient-leaf { background: rgba(107, 191, 127, .17) !important; }
+    .topbar { background: rgba(10, 21, 15, .78) !important; border-bottom-color: rgba(135, 208, 151, .12) !important; box-shadow: 0 8px 32px rgba(0,0,0,.12); }
+    .brand-mark { background: linear-gradient(145deg, #193426, #40351e) !important; box-shadow: inset 0 0 0 1px rgba(132, 210, 150, .2) !important; }
+    .brand-mark span, .brand-name { color: var(--ink) !important; }
+    .nav-links { color: #b0c3b5 !important; }
+    .nav-links a:hover { color: var(--green) !important; }
+    .nav-cta { background: linear-gradient(135deg, #4eae73, #28784d) !important; color: #07140c !important; }
+    .menu-toggle { background: #1d3627 !important; color: #a6e4b5 !important; }
+    .eyebrow { background: rgba(23, 43, 31, .84) !important; border-color: rgba(130, 205, 145, .20) !important; color: #a8e2b5 !important; box-shadow: 0 7px 24px rgba(0,0,0,.16) !important; }
+    .pixel-kicker { color: #91cda0 !important; }
+    .section-heading h2, .story-main h3, .value-card h4, .season-card strong, .relic-card h3, .apply-card h3, .lookup-box h4 { color: var(--ink) !important; }
+    .section-heading p, .hero-copy p { color: #a5b8aa !important; }
+    .hero-copy h1 { color: #e9f3eb !important; text-shadow: 0 8px 40px rgba(83, 166, 105, .12); }
+    .hero-copy h1 .green-word { color: #85dfa0 !important; text-shadow: 0 4px 0 rgba(49, 105, 65, .32) !important; }
+    .hero-pill { color: #c0d2c4 !important; background: rgba(20, 38, 27, .80) !important; border-color: rgba(124, 194, 139, .20) !important; }
+    .hero-pill strong { color: #91dfa5 !important; }
+    .btn-secondary { color: #b3e8bf !important; background: rgba(23, 43, 31, .88) !important; border-color: rgba(132, 206, 149, .23) !important; }
+    .btn-secondary:hover { background: #213d2c !important; }
+    .hero-note { color: #91a99a !important; }
+    .hero-sun { background: radial-gradient(circle, rgba(243,202,105,.20) 0%, rgba(243,202,105,.11) 35%, rgba(243,202,105,.035) 62%, transparent 72%) !important; }
+    .island { filter: saturate(.8) brightness(.72); box-shadow: 0 35px 35px rgba(0,0,0,.30) !important; }
+    .hero-tree { filter: brightness(.72) saturate(.85); }
+    .floating-cloud { background: rgba(179, 210, 187, .17) !important; }
+    .bee-hint { color: #b9cfbd !important; background: #17291e !important; border: 1px solid rgba(136,205,150,.16); }
+    .hero-sticker { background: rgba(21, 39, 28, .94) !important; border-color: rgba(136,205,150,.20) !important; color: #b7cbbb !important; }
+    .hero-sticker b { color: #90dca1 !important; }
+    .story-band { background: rgba(13, 25, 18, .72) !important; border-color: rgba(130,205,145,.10) !important; }
+    .story-main { background: linear-gradient(140deg, #1a3022, #14251b) !important; border-color: rgba(132,205,149,.17) !important; }
+    .story-main p { color: #b1c3b5 !important; }
+    .story-main::after { color: rgba(123,210,143,.08) !important; }
+    .value-card { background: #15251b !important; border-color: rgba(132,205,149,.14) !important; }
+    .value-card .value-icon { background: #203b29 !important; }
+    .value-card p { color: #9fb3a4 !important; }
+    .season-card { background: rgba(22, 39, 28, .88) !important; border-color: rgba(132,205,149,.15) !important; box-shadow: 0 10px 28px rgba(0,0,0,.18) !important; }
+    .season-card small { color: #a6b9aa !important; }
+    .season-year { background: #203c2a !important; color: #a4e2b1 !important; }
+    .relic-section { background: linear-gradient(180deg, rgba(18, 36, 25, .74), rgba(10, 20, 14, .42)) !important; }
+    .relic-card { background: linear-gradient(155deg, rgba(25, 43, 31, .98), rgba(17, 31, 22, .98)) !important; border-color: rgba(139,207,153,.16) !important; box-shadow: 0 15px 38px rgba(0,0,0,.26) !important; }
+    .relic-card:hover { box-shadow: 0 25px 50px rgba(0,0,0,.38) !important; border-color: rgba(145,220,160,.42) !important; }
+    .relic-card::before { background: linear-gradient(115deg, transparent 43%, rgba(181,229,188,.10) 49%, rgba(243,202,105,.13) 52%, transparent 59%) !important; }
+    .relic-card p { color: #a5b9aa !important; }
+    .relic-label { background: #203b29 !important; color: #b1e6bb !important; }
+    .winter .relic-visual { background: radial-gradient(circle at 50% 45%, rgba(92,153,202,.22), transparent 62%), linear-gradient(145deg, #1b3040, #182b27) !important; }
+    .spring .relic-visual { background: radial-gradient(circle at 50% 45%, rgba(222,143,180,.19), transparent 62%), linear-gradient(145deg, #382738, #223326) !important; }
+    .autumn .relic-visual { background: radial-gradient(circle at 50% 45%, rgba(205,155,90,.18), transparent 62%), linear-gradient(145deg, #3b2d21, #29271e) !important; }
+    .summer .relic-visual { background: radial-gradient(circle at 50% 45%, rgba(133,190,96,.19), transparent 62%), linear-gradient(145deg, #243a28, #312f20) !important; }
+    .relic-visual-texture { position: relative; isolation: isolate; }
+    .relic-visual-texture::before { background: rgba(179,220,185,.055) !important; width: 190px !important; height: 190px !important; box-shadow: 0 0 70px rgba(116,203,135,.09); }
+    .relic-texture { position: relative; z-index: 2; display: block; image-rendering: pixelated; filter: drop-shadow(0 14px 17px rgba(0,0,0,.42)); }
+    .relic-texture-item { width: 112px; height: 112px; object-fit: contain; transform: translateZ(40px); }
+    .texture-chip { position: absolute; z-index: 3; right: 10px; bottom: 9px; padding: 5px 8px; border-radius: 999px; background: rgba(7,17,11,.72); border: 1px solid rgba(157,220,166,.18); color: #b9d7be; font: 9px 'Nunito', sans-serif; font-weight: 900; letter-spacing: .08em; backdrop-filter: blur(9px); }
+    .texture-orbit { position: absolute; width: 126px; height: 126px; border: 1px solid rgba(161,220,170,.13); border-radius: 50%; box-shadow: 0 0 34px rgba(102,190,123,.07), inset 0 0 24px rgba(102,190,123,.04); }
+    .relic-file { display: block; margin-top: 10px; color: #718c79; font: 9px 'Nunito', sans-serif; overflow-wrap: anywhere; letter-spacing: .02em; transform: translateZ(12px); }
+    .relic-visual-uv { display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 8px; background-image: linear-gradient(45deg, rgba(178,214,183,.035) 25%, transparent 25%, transparent 75%, rgba(178,214,183,.035) 75%), linear-gradient(45deg, rgba(178,214,183,.035) 25%, transparent 25%, transparent 75%, rgba(178,214,183,.035) 75%) !important; background-position: 0 0, 8px 8px !important; background-size: 16px 16px !important; }
+    .relic-texture-uv { width: min(100%, 132px); height: 132px; object-fit: contain; transform: translateZ(22px); }
+    .uv-caption { position: relative; z-index: 2; color: #9ebca5; font-size: 8px; font-weight: 1000; letter-spacing: .16em; }
+    .apply-info { background: linear-gradient(155deg, #1e5736, #133b27) !important; }
+    .apply-card { background: #14231a !important; border-color: rgba(132,205,149,.16) !important; }
+    .form-intro { color: #a1b6a6 !important; }
+    .field label { color: #c1d7c6 !important; }
+    .field label em { color: #829b89 !important; }
+    .field input, .field textarea, .field select, .lookup-input { background: #0d1a12 !important; color: #e3efe6 !important; border-color: rgba(136,198,147,.22) !important; }
+    .field input:focus, .field textarea:focus, .field select:focus, .lookup-input:focus { background: #122319 !important; border-color: #72c98d !important; box-shadow: 0 0 0 4px rgba(91,181,112,.13) !important; }
+    .field input::placeholder, .field textarea::placeholder, .lookup-input::placeholder { color: #728a78 !important; }
+    .field small { color: #819b88 !important; }
+    .privacy-note { background: #1c3021 !important; color: #a3b9a7 !important; }
+    .form-message { background: #3b321e !important; color: #f2d991 !important; }
+    .status-panel { background: linear-gradient(145deg, #17291d, #18251b) !important; border-color: rgba(124,202,142,.2) !important; }
+    .status-copy { color: #a5b9aa !important; }
+    .status-badge.pending { background: #4a3d20 !important; color: #ffe39a !important; }
+    .status-badge.approved { background: #2d9459 !important; color: white !important; }
+    .status-badge.rejected { background: #493326 !important; color: #e7bd9b !important; }
+    .approved-box { background: linear-gradient(135deg, #1b4029, #39331f) !important; border-color: rgba(123,204,142,.24) !important; }
+    .approved-box h4 { color: #b9ebc3 !important; }
+    .approved-box p { color: #b0c8b5 !important; }
+    .server-ip { background: rgba(7,17,11,.58) !important; border-color: rgba(137,203,149,.22) !important; color: #e5f1e8 !important; }
+    .pack-btn { background: #1c3525 !important; color: #b3e7bf !important; border-color: rgba(135,206,149,.2) !important; }
+    .status-actions button, .reapply-btn { background: #1b3022 !important; border-color: rgba(135,206,149,.18) !important; color: #b5d4bb !important; }
+    .status-actions .demo-label { color: #819b88 !important; }
+    .lookup-box { background: rgba(14,27,18,.84) !important; border-color: rgba(132,205,149,.25) !important; }
+    .lookup-box p { color: #8fa694 !important; }
+    footer { background: rgba(6,14,9,.90) !important; border-top-color: rgba(132,205,149,.14) !important; }
+    .footer-brand p, .footer-bottom { color: #829889 !important; }
+    .footer-links { color: #aec3b3 !important; }
+    .sprout-note { background: #1c3223 !important; color: #c5d9c8 !important; border-color: rgba(132,205,149,.2) !important; }
+    .achievement-toast { background: #1b3022 !important; color: #e7f2e9 !important; border-color: rgba(132,205,149,.22) !important; }
+    .achievement-toast small { color: #a6b9aa !important; }
+    .letter-overlay { background: rgba(3,10,6,.82) !important; backdrop-filter: blur(12px); }
+    .letter { background: linear-gradient(145deg, #1b3022, #14231a) !important; color: #e5f0e7 !important; border-color: rgba(139,207,153,.2) !important; box-shadow: 0 30px 100px rgba(0,0,0,.55) !important; }
+    .letter p { color: #b2c5b6 !important; }
+    .letter h3 { color: #e9f4eb !important; }
+    .letter-sign { color: #9de1aa !important; }
+    .close-letter { background: #294332 !important; color: #d8ebdc !important; }
+    .nature-particle { filter: drop-shadow(0 2px 4px rgba(0,0,0,.25)); }
+    @media (max-width: 820px) {
+      .nav-links { background: rgba(13,25,18,.98) !important; border-color: rgba(132,205,149,.17) !important; box-shadow: var(--shadow) !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <div class="sun-glow"></div><div class="light-wash"></div>
+    <i class="ambient-leaf"></i><i class="ambient-leaf"></i><i class="ambient-leaf"></i><i class="ambient-leaf"></i><i class="ambient-leaf"></i>
+  </div>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#home" aria-label="FOLYIX SMP — наверх">
+        <span class="brand-mark"><span>F</span></span><span class="brand-name">FOLYIX</span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#about">О мире</a><a href="#relics">Реликвии</a><a href="#seasons">Сезоны</a><a href="#apply">Заявка</a>
+      </nav>
+      <a class="nav-cta" href="#apply">Войти в мир <span>↗</span></a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow"><i class="dot"></i> Minecraft Java · 1.21.11</span>
+          <h1 class="pixel">FOLYIX<br><span class="green-word">SMP</span></h1>
+          <p>Мир, в котором хочется остаться. Небольшое сообщество, общее приключение и истории, которые создаём мы сами — день за днём, блок за блоком.</p>
+          <div class="hero-pills">
+            <span class="hero-pill"><strong>100%</strong> БЕЗ ДОНАТА</span>
+            <span class="hero-pill">ТОЛЬКО ПО ЗАЯВКАМ</span>
+            <span class="hero-pill">СДЕЛАНО С ДУШОЙ</span>
+          </div>
+          <div class="button-row">
+            <a class="btn-primary" href="#apply">Подать заявку в наш мир <span>✿</span></a>
+            <a class="btn-secondary" href="#about">Узнать историю <span>↓</span></a>
+          </div>
+          <div class="hero-note"><span>☀️</span> Один сезон — один год — множество общих воспоминаний.</div>
+        </div>
+
+        <div class="hero-art" aria-label="Маленькая пчёлка — хранительница мира">
+          <div class="hero-sun"></div><div class="floating-cloud cloud-one"></div><div class="floating-cloud cloud-two"></div>
+          <div class="hero-tree tree-one"></div><div class="hero-tree tree-two"></div><div class="island"></div>
+          <div class="hero-sticker sticker-a">🌱 <b>Новый сезон</b><br>новая история</div>
+          <div class="hero-sticker sticker-b">☁️ мир для<br><b>своих людей</b></div>
+          <div class="bee-wrap">
+            <!-- SVG-пчёлка: зрачки следят за курсором по экрану -->
+            <svg id="worldBee" viewBox="0 0 220 225" role="button" tabindex="0" aria-label="Нажми на пчёлку десять раз — откроется письмо создателя">
+              <defs>
+                <linearGradient id="beeBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff7c9"/><stop offset="1" stop-color="#f6d65e"/></linearGradient>
+                <linearGradient id="beeWing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#cdeedb" stop-opacity=".72"/></linearGradient>
+              </defs>
+              <ellipse cx="64" cy="76" rx="37" ry="23" fill="url(#beeWing)" stroke="#a9d8b9" stroke-width="3" transform="rotate(-28 64 76)"/>
+              <ellipse cx="151" cy="74" rx="37" ry="23" fill="url(#beeWing)" stroke="#a9d8b9" stroke-width="3" transform="rotate(28 151 74)"/>
+              <path d="M78 45 Q110 20 142 45" fill="none" stroke="#d1a943" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="78" cy="43" r="7" fill="#fff" stroke="#b78c35" stroke-width="2"/><circle cx="142" cy="43" r="7" fill="#fff" stroke="#b78c35" stroke-width="2"/>
+              <rect x="49" y="55" width="122" height="126" rx="43" fill="url(#beeBody)" stroke="#d0aa45" stroke-width="3"/>
+              <path d="M50 101 H170" stroke="#6c5930" stroke-width="17" opacity=".92"/><path d="M51 140 H169" stroke="#6c5930" stroke-width="17" opacity=".92"/>
+              <path d="M50 100 H170" stroke="#3f3a2b" stroke-width="3" opacity=".45"/><path d="M51 140 H169" stroke="#3f3a2b" stroke-width="3" opacity=".45"/>
+              <ellipse cx="88" cy="91" rx="16" ry="20" fill="#fff"/><ellipse cx="132" cy="91" rx="16" ry="20" fill="#fff"/>
+              <g id="beePupils"><circle id="pupilLeft" cx="91" cy="94" r="8" fill="#284936"/><circle id="pupilRight" cx="135" cy="94" r="8" fill="#284936"/><circle cx="94" cy="90" r="2.7" fill="#fff"/><circle cx="138" cy="90" r="2.7" fill="#fff"/></g>
+              <path d="M96 122 Q110 134 124 122" fill="none" stroke="#8d6633" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M50 121 Q38 115 31 124" fill="none" stroke="#d7a84a" stroke-width="5" stroke-linecap="round"/>
+              <path d="M170 121 Q182 115 189 124" fill="none" stroke="#d7a84a" stroke-width="5" stroke-linecap="round"/>
+              <path d="M80 178 Q110 194 140 178" fill="none" stroke="#d1a54b" stroke-width="4" stroke-linecap="round"/>
+              <path d="M98 180 L87 197 M122 180 L133 197" stroke="#856640" stroke-width="5" stroke-linecap="round"/>
+              <path d="M89 198 L79 198 M131 198 L141 198" stroke="#856640" stroke-width="5" stroke-linecap="round"/>
+              <path d="M183 77 l9 -8 M190 91 l12 -1" stroke="#fff4c2" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <div class="bee-hint">поздоровайся с пчёлкой ♡</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section story-band" id="about">
+      <div class="container">
+        <div class="section-heading">
+          <span class="pixel-kicker">01 / НАЧАЛО ИСТОРИИ</span>
+          <h2>Не просто сервер. <span style="color:var(--green)">Наш общий мир.</span></h2>
+          <p>FOLYIX — приватный сюжетный SMP, где важны не цифры онлайна, а люди, события и воспоминания, которые остаются после игры.</p>
+        </div>
+        <div class="story-grid">
+          <article class="story-main">
+            <span class="eyebrow">📖 ЛОР · ЭХО РАСКОЛА</span>
+            <h3>Когда мир помнит больше, чем кажется…</h3>
+            <p>Говорят, когда-то мир был цельным. Но однажды раздался Раскол — и в привычных местах появились странные отголоски прошлого. Никто не знает, что именно произошло. Игрокам предстоит находить подсказки, замечать детали и постепенно собирать историю вместе.</p>
+            <p>Это не готовый сценарий, в котором каждому выдали роль. Это живой мир: ваши решения, постройки и встречи становятся частью его лора.</p>
+          </article>
+          <div class="story-side">
+            <article class="value-card"><div class="value-icon">🌿</div><h4>Честное выживание</h4><p>Без Pay-to-Win, платных преимуществ и донатных привилегий.</p></article>
+            <article class="value-card"><div class="value-icon">🤝</div><h4>Свои люди</h4><p>Вход по заявкам помогает собрать комфортное и дружелюбное комьюнити.</p></article>
+            <article class="value-card"><div class="value-icon">🧭</div><h4>Свобода игры</h4><p>Строй, исследуй, торгуй, объединяйся — свой путь выбираешь ты.</p></article>
+            <article class="value-card"><div class="value-icon">☀️</div><h4>История сезона</h4><p>Каждый год — новый сезон, новые события и новая глава FOLYIX.</p></article>
+          </div>
+        </div>
+
+        <div class="season-strip" id="seasons">
+          <article class="season-card"><div class="season-symbol">🌸</div><strong>Весна</strong><small>Первые ростки, новые встречи и начало приключения.</small><span class="season-year">ГЛАВА I · 1 ГОД</span></article>
+          <article class="season-card"><div class="season-symbol">☀️</div><strong>Лето</strong><small>Большие планы, тёплые вечера и открытия.</small><span class="season-year">ГЛАВА II · 1 ГОД</span></article>
+          <article class="season-card"><div class="season-symbol">🍂</div><strong>Осень</strong><small>Тайны Эха Раскола и немного волшебства.</small><span class="season-year">ГЛАВА III · 1 ГОД</span></article>
+          <article class="season-card"><div class="season-symbol">❄️</div><strong>Зима</strong><small>Финал большой истории и тёплые воспоминания.</small><span class="season-year">ГЛАВА IV · 1 ГОД</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section relic-section" id="relics">
+      <div class="container">
+        <div class="section-heading">
+          <span class="pixel-kicker">02 / ПАМЯТЬ СЕЗОНОВ</span>
+          <h2>Реликвии, у которых есть <span style="color:var(--green)">своя история</span></h2>
+          <p>Особенные сезонные награды. Они напоминают о событиях, приключениях и людях, которые сделали сезон незабываемым.</p>
+        </div>
+        <div class="relic-grid relic-grid-textures">
+          <article class="relic-card winter" data-tilt>
+            <div class="relic-visual relic-visual-texture">
+              <span class="texture-orbit" aria-hidden="true"></span>
+              <img class="relic-texture relic-texture-item" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABwUlEQVR4AZSRSyh8YRjGn0/+/WdcxpQkC1NEKaWwU1YWokYpC0k2JDZu45JLSmFBSkrWSk3KgmYhVspKQiml0DAnSW5D5JaOeb7pHWeEOM077znf9/6e5znficEfruWtfZPjzn6fKfUngbLCHEVwtjofrMztE/xKwOpMkClYp4dr3wsIxEE6F5b0mgJ33pioWTzC+cGCikrwGSLMtbziVvN8pBOeQBCE7+rbEa/euB2dgE5cJcTO6mmbwfX4IGxXZ5hwOfG6aWjnl8cHbn8IpHfPmVmjK/qURYjOVpjE/V2QDcERt+JN1CtMuHMhIoR3pye1s0pMQuWSwXkkOJy6S8qIgDFWqzy+PVDElVtt0jnL2ANhvrPLrsNBEkhKLSBqWjr0F/B6I86EedrHniJVv7Ab2g3/hNEConbYV6oaKpph21mPOBMOI8DlULli8VkYLcAFKqZkuM3/tngkDU/B8PtxO9CC1OyqcPbQEGdCDdJ5HxGoq+oC4eenB/2ZKDJfkBklIq7StQAdWAJf+H368zB662oAFLE3dXD2y9IJ/sXGwh5ng8DWiPbkNPx0xTgcCRq2DklEnnyjdwPs1n3r/TsAAAD//zS87YoAAAAGSURBVAMADa3XuJ5rFeYAAAAASUVORK5CYII=" alt="Пиксельная текстура меча Зимняя шалость, 16 на 16 пикселей">
+              <span class="texture-chip">PNG · 16×16</span>
+            </div>
+            <h3>Зимняя шалость</h3>
+            <p>Сезонный клинок зимнего фестиваля. Его холодное сияние хранит память о снежных вечерах и победителях зимнего события.</p>
+            <span class="relic-label">❄️ ЗИМНИЙ СЕЗОН</span>
+            <span class="relic-file">folyix_sword.png · текстура предмета</span>
+          </article>
+          <article class="relic-card spring" data-tilt>
+            <div class="relic-visual relic-visual-texture">
+              <span class="texture-orbit" aria-hidden="true"></span>
+              <img class="relic-texture relic-texture-item" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABP0lEQVR4AayPoU9CURTGzyPoDBSLbmJyBGU6NT4352bQQKAYDBYbGtxMBmayWgwGohWDmwWojACB8RcQ+AMoBCjssd+Be3d4Y4wN3vbbPef7zvnufQlZ8Vt/wMVdIYLz2yc9be00+2j/Amemj0MBhgb9HodsJbdVOwmzwscsJ2gAAiaLmeSBQPYoJ63yd1AvfQTX+5fMqp4LH+T+5kXeX6sRogZwQ2a6eLibEsC04NPjATVoADcgQrrfFtjoVPA9eIAHztAAGkTYk5EAmoMwPMADNHwNoEGEzVRDoDus4XvwAA+coQE0iJA4jQTQLHiAB+4CDSj8fQbPX6W5i4QwzBLQ5x9/pVhuBtQaQBHn7GonLvneej6AxOLP5L8582//egNbizwfwCDEl9GAQDxqy0wAQ2AHbI0HVpsJsMay9RgAAP//lR8T7AAAAAZJREFUAwCwtosh/t32iAAAAABJRU5ErkJggg==" alt="Пиксельная текстура крыльев ласточки, 16 на 16 пикселей">
+              <span class="texture-chip">PNG · 16×16</span>
+            </div>
+            <h3>Крылья ласточки</h3>
+            <p>Редкая награда весеннего события — яркие крылья, символ свободы, лёгкости и новых горизонтов.</p>
+            <span class="relic-label">🌸 ВЕСЕННИЙ СЕЗОН</span>
+            <span class="relic-file">folyix_elytra.png · текстура предмета</span>
+          </article>
+          <article class="relic-card autumn" data-tilt>
+            <div class="relic-visual relic-visual-texture">
+              <span class="texture-orbit" aria-hidden="true"></span>
+              <img class="relic-texture relic-texture-item" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB3klEQVR4AZSSz2sTURDHvy+lIRDzB6wEPMWViKERjSBV8aAgLCFGhKjYgIgGD4IXyUEQQSEKehFlRSil0EsPKbQ9JO2htJRS2kITGgKlhx4K6S1Q0qakLX3d76NZ+mPTHwvzdvbNfD8zw44LZ3gedN6Q925HpFPqqYA7t67LS4ErCOiXEem4qiDGw/s28EQABXowiOSrt/j0+St+/jZBYKPRgO+CVzXUEkBxKBzG+w8fUSgUkMvl4Pf78ed/D7a2dzA8MiZIcARw5qZYSgnDMKBpGvPhdrvxr7sXkfA1yQtHAANNY2X6oVAIXq8XPp8PHo8H/QND6LzZIR0Bo5NzomS1TWEsFkM+n4cQqmNks1k1DmNt7W44Ahicni+JN8nndBGPx1EsFm2f4yQeGxifmhEtAV+CF+WjRhXJxBNUq1Xouq7etVoNv75/AwuQ6AhIp9NyA23YjHapxNcvE8xVRp+V1Yd1HAOkUim5O9hnhYBMJqMGn5wtiK5nT0ExfRXcPw4B0lZlbWIQrugL/CiviFRAU7+KuTPzC+KomPc2gJXL5TJW70bRrGwuraoOmNjKXNw4WqVSQdBaW9M0bdG7Ax20BDDQ7pJYXizZlXlH+3uWDur1OtbWN8GVpei8tgcAAP//isqqsQAAAAZJREFUAwAD3qt3oFJdBwAAAABJRU5ErkJggg==" alt="Пиксельная текстура булавы Костяной крушитель, 16 на 16 пикселей">
+              <span class="texture-chip">PNG · 16×16</span>
+            </div>
+            <h3>Костяной крушитель</h3>
+            <p>Осенняя реликвия с характером. Её история связана с загадками и испытаниями хэллоуинского события.</p>
+            <span class="relic-label">🍂 ОСЕННИЙ СЕЗОН</span>
+            <span class="relic-file">folyix_mace.png · текстура предмета</span>
+          </article>
+          <article class="relic-card summer" data-tilt>
+            <div class="relic-visual relic-visual-uv">
+              <span class="uv-caption">РАЗВЁРТКА ТЕКСТУРЫ</span>
+              <img class="relic-texture relic-texture-uv" src="data:image/png;base64,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" alt="Полная UV-развёртка текстуры Шалкера скаута, 64 на 64 пикселя">
+              <span class="texture-chip">UV · 64×64</span>
+            </div>
+            <h3>Шалкер скаута</h3>
+            <p>Особенный набор путешественника. Здесь показана вся развёртка его текстуры — со всеми сторонами и деталями.</p>
+            <span class="relic-label">☀️ ЛЕТНИЙ СЕЗОН</span>
+            <span class="relic-file">scout_shulker.png · UV-развёртка</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section apply-section" id="apply">
+      <div class="container">
+        <div class="section-heading">
+          <span class="pixel-kicker">03 / ТВОЯ ГЛАВА НАЧИНАЕТСЯ ЗДЕСЬ</span>
+          <h2>Может быть, нам по пути?</h2>
+          <p>Расскажи немного о себе и о том, как тебе нравится играть. Заявки читает создатель сервера — один разработчик, а не автоматический фильтр.</p>
+        </div>
+        <div class="apply-shell">
+          <aside class="apply-info">
+            <span class="eyebrow" style="background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.2);color:#fff"><i class="dot" style="background:#ffdf78;box-shadow:0 0 0 5px rgba(255,223,120,.14)"></i> СЕЗОН 01 · ЗАЯВКИ ОТКРЫТЫ</span>
+            <h3>Хороший сервер начинается с хороших людей.</h3>
+            <p>Мы хотим собрать небольшое сообщество, в котором приятно строить, общаться и возвращаться в игру. Поэтому вход — по заявкам, а не по случайному публичному адресу.</p>
+            <div class="limit-box"><div class="limit-number" id="capacityCount">100</div><div><b>мест в первом сезоне</b><small>максимум принятых игроков</small></div></div>
+            <div class="apply-rules">
+              <span>🌱 Отвечай искренне — идеальных ответов не существует.</span>
+              <span>🤝 Уважай других игроков и их постройки.</span>
+              <span>🧩 Участие в видео или стримах не обязательно.</span>
+              <span>📬 Проверить статус можно по нику Minecraft.</span>
+            </div>
+          </aside>
+
+          <div class="apply-card">
+            <div id="applicationFormWrap">
+              <h3>Заявка в FOLYIX SMP</h3>
+              <p class="form-intro">Несколько коротких вопросов — чтобы понять, будет ли тебе комфортно в нашем мире. Все поля ниже обязательны.</p>
+              <form id="applicationForm" novalidate>
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="mcNick">Ник в Minecraft</label>
+                    <input id="mcNick" name="nickname" type="text" maxlength="16" minlength="3" autocomplete="off" placeholder="Например, Steve123" required>
+                    <small>Java Edition · 3–16 символов.</small>
+                  </div>
+                  <div class="field">
+                    <label for="playerAge">Возраст</label>
+                    <input id="playerAge" name="age" type="number" min="1" max="99" inputmode="numeric" placeholder="Сколько тебе лет?" required>
+                    <small>Укажи только возраст, не дату рождения.</small>
+                  </div>
+                  <div class="field full">
+                    <label for="experience">Опыт на SMP</label>
+                    <textarea id="experience" name="experience" maxlength="800" placeholder="Играл ли ты раньше на SMP? Что тебе в таком формате нравится?" required></textarea>
+                  </div>
+                  <div class="field full">
+                    <label for="creator">Планируешь снимать видео или стримить?</label>
+                    <select id="creator" name="creator" required>
+                      <option value="" selected disabled>Выбери вариант</option>
+                      <option>Да, YouTube</option><option>Да, TikTok</option><option>Да, иногда стримы</option><option>Возможно, позже</option><option>Нет, хочу играть для себя</option>
+                    </select>
+                  </div>
+                  <div class="field full">
+                    <label for="conflict">Как ты обычно решаешь спорные ситуации с другими игроками?</label>
+                    <textarea id="conflict" name="conflict" maxlength="1000" placeholder="Например: сначала спокойно обсуждаю ситуацию и стараюсь найти решение, которое устроит всех…" required></textarea>
+                  </div>
+                </div>
+                <div class="privacy-note">🔒 Не указывай здесь настоящее имя, адрес, телефон, пароли или другие личные данные. Заявка отправляется в таблицу владельца сервера. На этом устройстве сайт запомнит только твой игровой ник и статус.</div>
+                <button class="btn-primary submit-btn" type="submit" id="submitApplication">Отправить заявку <span>→</span></button>
+                <div class="form-message" id="formMessage" role="status"></div>
+              </form>
+            </div>
+
+            <div class="status-panel" id="statusPanel" aria-live="polite">
+              <div class="status-top"><h3 id="statusTitle">С возвращением!</h3><span class="status-badge pending" id="statusBadge">🌱 На рассмотрении</span></div>
+              <p class="status-copy" id="statusCopy">Твоя заявка уже у нас. Спасибо, что хочешь стать частью FOLYIX!</p>
+              <div class="approved-box" id="approvedBox">
+                <h4>Добро пожаловать в FOLYIX! 🎉</h4>
+                <p style="margin:0 0 12px;color:#64806b;font-size:12px;line-height:1.6">Твоя заявка одобрена. Сохрани адрес и подготовься к приключению.</p>
+                <div class="server-ip"><span id="serverIpText">IP будет объявлен отдельно</span><button class="copy-btn" type="button" id="copyIpBtn">Копировать</button></div>
+                <a class="pack-btn" id="resourcePackLink" href="#" target="_blank" rel="noopener">⬇ Скачать ресурспак</a>
+              </div>
+              <div class="status-actions" id="demoControls">
+                <span class="demo-label">ДЕМО-РЕЖИМ · переключи статус, чтобы проверить карточки:</span>
+                <button type="button" data-demo-status="pending">🌱 На рассмотрении</button>
+                <button type="button" data-demo-status="approved">🎉 Одобрено</button>
+                <button type="button" data-demo-status="rejected">🍃 Отказано</button>
+              </div>
+              <button type="button" class="reapply-btn" id="reapplyBtn" style="display:none">Подать заявку снова</button>
+            </div>
+
+            <div class="lookup-box">
+              <h4>Уже подавал заявку?</h4>
+              <p>Введи ник Minecraft, чтобы узнать текущий статус — даже с другого устройства.</p>
+              <form class="lookup-row" id="lookupForm">
+                <input class="lookup-input" id="lookupNick" type="text" maxlength="16" minlength="3" placeholder="Твой ник Minecraft" autocomplete="off" required>
+                <button type="submit" class="btn-secondary">Проверить статус</button>
+              </form>
+              <div class="lookup-result" id="lookupResult" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-row">
+        <div class="footer-brand"><span class="brand-mark"><span>F</span></span><div><span class="brand-name">FOLYIX SMP</span><p>Мир, в котором хочется остаться.</p></div></div>
+        <div class="footer-links"><a href="#about">О проекте</a><a href="#relics">Реликвии</a><a href="#apply">Заявка</a></div>
+      </div>
+      <div class="footer-bottom"><span>© FOLYIX SMP · Независимый Minecraft-проект</span><span>Сделано с теплом и щепоткой магии <span class="sprout-secret" id="sproutSecret" tabindex="0" role="button" aria-label="Секретный росток"><span class="sprout">🌱</span><span class="sprout-note">В первой главе мир ещё не рассказывает всё. Где-то под землёй спрятано первое Эхо Раскола — крошечный след события, которое однажды изменило всё. Когда придёт время, росток станет началом большой истории. 🌿</span></span></span></div>
+    </div>
+  </footer>
+
+  <div class="achievement-toast" id="achievementToast" role="status" aria-live="polite">
+    <div class="achievement-icon">🏅</div><div><strong>Хранитель Искренности</strong><small>Ты нашёл маленькое чудо FOLYIX.</small></div>
+  </div>
+
+  <div class="letter-overlay" id="letterOverlay" role="dialog" aria-modal="true" aria-labelledby="letterTitle">
+    <article class="letter">
+      <button class="close-letter" id="closeLetter" aria-label="Закрыть письмо">×</button>
+      <div class="letter-flower">🌼</div>
+      <span class="pixel-kicker">НЕБОЛЬШОЕ ПИСЬМО ОТ СОЗДАТЕЛЯ</span>
+      <h3 id="letterTitle">Привет, будущий житель FOLYIX!</h3>
+      <p>Если ты читаешь это письмо, значит, ты уже нашёл маленькую секретку. И мне хочется сказать тебе кое-что важное.</p>
+      <p>FOLYIX создаётся одним человеком, но я очень надеюсь, что со временем он станет местом, которое будет принадлежать целому сообществу. Здесь не обязательно быть самым опытным игроком, строить огромные замки или постоянно снимать видео. Достаточно быть собой, уважать других и хотеть разделить с кем-то приключение.</p>
+      <p>Я не обещаю идеальный мир без ошибок. Но обещаю стараться делать его честным, уютным и живым. Пусть однажды у каждого из нас появится история, которую захочется вспоминать даже после окончания сезона.</p>
+      <p>Спасибо, что заглянул. Увидимся по ту сторону портала. 🌿</p>
+      <div class="letter-sign">— создатель FOLYIX</div>
+    </article>
+  </div>
+
+  <script>
+    /* ================================================================
+       НАСТРОЙКИ FOLYIX — МЕНЯЙ ЭТИ ЗНАЧЕНИЯ В ОБЫЧНОМ БЛОКНОТЕ
+       ================================================================ */
+    const GOOGLE_SCRIPT_URL = "СЮДА_ВСТАВИТЬ_ССЫЛКУ"; // URL опубликованного Google Apps Script
+    const DEMO_MODE = true; // true = тест без таблицы; false = реальные заявки
+    const SERVER_IP = "СКОРО_БУДЕТ_ОБЪЯВЛЕН"; // Например: play.example.net
+    const RESOURCE_PACK_URL = "СЮДА_ВСТАВИТЬ_ССЫЛКУ"; // Ссылка на скачивание FOLYIX_Pack.zip
+    const MAX_PLAYERS = 100; // Подсказка на сайте, не автоматический лимит в таблице
+
+    const STORAGE_KEY = "folyix_player_v1";
+    const STATUS_TEXT = {
+      pending: { label: "🌱 На рассмотрении", title: "Заявка отправлена!", text: "Спасибо, что хочешь стать частью FOLYIX. Создатель сервера ознакомится с твоей заявкой, а статус можно проверить здесь в любое время.", className: "pending" },
+      approved: { label: "🎉 Одобрено", title: "С возвращением, будущий житель!", text: "Ура! Тебя ждут в FOLYIX. Ниже появятся данные для входа, когда сервер будет готов их опубликовать.", className: "approved" },
+      rejected: { label: "🍃 Пока не в этот раз", title: "Спасибо за интерес к FOLYIX", text: "В этот раз мы не можем пригласить тебя в сезон. Это не оценка тебя как человека — просто сейчас набор складывается иначе. Можешь попробовать подать заявку снова позже.", className: "rejected" }
+    };
+
+    /* Служебные функции */
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+    const isRealBackendReady = () => !DEMO_MODE && GOOGLE_SCRIPT_URL.startsWith("https://script.google.com/macros/s/") && !GOOGLE_SCRIPT_URL.includes("СЮДА_");
+    const cleanNickname = value => String(value || "").trim().replace(/^@/, "");
+    const isValidNickname = value => /^[A-Za-z0-9_]{3,16}$/.test(value);
+
+    function loadPlayer() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); }
+      catch (error) { console.warn("Не удалось прочитать сохранённый ник:", error); return null; }
+    }
+    function savePlayer(player) {
+      // Сохраняем только игровой ник и статус — ответы анкеты остаются в таблице.
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ nickname: player.nickname, status: player.status }));
+    }
+
+    /* Появление карточки со статусом */
+    function renderStatus(player) {
+      const current = STATUS_TEXT[player.status] ? player.status : "pending";
+      const details = STATUS_TEXT[current];
+      const panel = $("#statusPanel");
+      $("#applicationFormWrap").style.display = "none";
+      panel.classList.add("visible");
+      $("#statusTitle").textContent = current === "pending" ? `С возвращением, ${player.nickname}!` : `${details.title} ${player.nickname}!`;
+      $("#statusBadge").textContent = details.label;
+      $("#statusBadge").className = `status-badge ${details.className}`;
+      $("#statusCopy").textContent = DEMO_MODE ? details.text + " Это демо-режим: запись хранится только в этом браузере." : details.text;
+      $("#approvedBox").classList.toggle("show", current === "approved");
+      $("#reapplyBtn").style.display = current === "rejected" ? "inline-flex" : "none";
+      $("#demoControls").style.display = DEMO_MODE ? "flex" : "none";
+      $("#serverIpText").textContent = SERVER_IP && !SERVER_IP.includes("СКОРО_") ? SERVER_IP : "IP будет объявлен отдельно";
+      const packLink = $("#resourcePackLink");
+      if (RESOURCE_PACK_URL && !RESOURCE_PACK_URL.includes("СЮДА_")) {
+        packLink.href = RESOURCE_PACK_URL;
+        packLink.style.opacity = "1";
+        packLink.style.pointerEvents = "auto";
+      } else {
+        packLink.href = "#";
+        packLink.style.opacity = ".55";
+        packLink.style.pointerEvents = "none";
+        packLink.title = "Ссылка на ресурспак ещё не добавлена в настройки сайта";
+      }
+      savePlayer({ nickname: player.nickname, status: current });
+    }
+
+    function showFormAgain() {
+      $("#statusPanel").classList.remove("visible");
+      $("#applicationFormWrap").style.display = "block";
+      $("#applicationForm").reset();
+      $("#formMessage").classList.remove("show");
+      const current = loadPlayer();
+      if (current) localStorage.removeItem(STORAGE_KEY);
+    }
+
+    /* Мягкие частицы при каждом клике */
+    const particleColors = ["#4caf50", "#8ccc87", "#ffd54f", "#2e8b57", "#d9efb4", "#fff0a9"];
+    function burstParticles(x, y, amount = 8) {
+      for (let i = 0; i < amount; i++) {
+        const particle = document.createElement("i");
+        const kind = Math.random();
+        particle.className = `nature-particle ${kind > .68 ? "leaf" : kind > .38 ? "spark" : ""}`;
+        const size = 4 + Math.random() * 7;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 24 + Math.random() * 65;
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+        particle.style.setProperty("--size", `${size}px`);
+        particle.style.setProperty("--color", particleColors[Math.floor(Math.random() * particleColors.length)]);
+        particle.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+        particle.style.setProperty("--dy", `${Math.sin(angle) * distance + 28 + Math.random() * 22}px`);
+        particle.style.setProperty("--rot", `${Math.random() * 460 - 230}deg`);
+        particle.style.setProperty("--duration", `${650 + Math.random() * 650}ms`);
+        document.body.appendChild(particle);
+        particle.addEventListener("animationend", () => particle.remove(), { once: true });
+      }
+    }
+    document.addEventListener("pointerdown", event => {
+      if (event.pointerType === "touch") burstParticles(event.clientX, event.clientY, 5);
+      else burstParticles(event.clientX, event.clientY, 7);
+    }, { passive: true });
+
+    /* 3D-наклон сезонных реликвий */
+    const canTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (canTilt) {
+      $$("[data-tilt]").forEach(card => {
+        card.addEventListener("pointermove", event => {
+          const rect = card.getBoundingClientRect();
+          const px = (event.clientX - rect.left) / rect.width;
+          const py = (event.clientY - rect.top) / rect.height;
+          const rx = (0.5 - py) * 10;
+          const ry = (px - 0.5) * 12;
+          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`;
+        });
+        card.addEventListener("pointerleave", () => { card.style.transform = "perspective(900px) rotateX(0) rotateY(0) translateY(0)"; });
+      });
+    }
+
+    /* Пчёлка смотрит на курсор */
+    const bee = $("#worldBee");
+    const beePupils = [$("#pupilLeft"), $("#pupilRight")];
+    document.addEventListener("pointermove", event => {
+      const rect = bee.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dx = event.clientX - centerX;
+      const dy = event.clientY - centerY;
+      const angle = Math.atan2(dy, dx);
+      const distance = Math.min(4.2, Math.hypot(dx, dy) / 115);
+      const moveX = Math.cos(angle) * distance;
+      const moveY = Math.sin(angle) * distance;
+      beePupils[0].setAttribute("cx", 91 + moveX);
+      beePupils[0].setAttribute("cy", 94 + moveY);
+      beePupils[1].setAttribute("cx", 135 + moveX);
+      beePupils[1].setAttribute("cy", 94 + moveY);
+    }, { passive: true });
+
+    /* Звук достижения через Web Audio API — включается только после клика пользователя */
+    function playAchievementSound() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        const context = new AudioContextClass();
+        const notes = [659.25, 783.99, 987.77, 1318.51];
+        notes.forEach((frequency, index) => {
+          const oscillator = context.createOscillator();
+          const gain = context.createGain();
+          oscillator.type = "sine";
+          oscillator.frequency.value = frequency;
+          gain.gain.setValueAtTime(.0001, context.currentTime + index * .105);
+          gain.gain.exponentialRampToValueAtTime(.12, context.currentTime + index * .105 + .025);
+          gain.gain.exponentialRampToValueAtTime(.0001, context.currentTime + index * .105 + .22);
+          oscillator.connect(gain); gain.connect(context.destination);
+          oscillator.start(context.currentTime + index * .105);
+          oscillator.stop(context.currentTime + index * .105 + .24);
+        });
+        setTimeout(() => context.close(), 1100);
+      } catch (error) { console.info("Web Audio недоступен в этом браузере."); }
+    }
+
+    /* Пасхалка №1: десять нажатий на пчёлку */
+    let beeClicks = 0;
+    let beeClickReset;
+    function openLetterCelebration() {
+      bee.classList.remove("bee-celebrate");
+      void bee.getBoundingClientRect();
+      bee.classList.add("bee-celebrate");
+      playAchievementSound();
+      for (let i = 0; i < 34; i++) {
+        const rect = bee.getBoundingClientRect();
+        const x = rect.left + rect.width / 2 + (Math.random() - .5) * 120;
+        const y = rect.top + rect.height / 2 + (Math.random() - .5) * 90;
+        burstParticles(x, y, 2);
+        if (i % 3 === 0) {
+          const heart = document.createElement("span");
+          heart.className = "flying-bee";
+          heart.textContent = Math.random() > .5 ? "💚" : "💎";
+          heart.style.left = `${x}px`; heart.style.top = `${y}px`;
+          heart.style.setProperty("--top", `${y}px`); heart.style.setProperty("--flight", "1.6s");
+          heart.style.animation = "none";
+          heart.animate([{ transform: "translateY(0) scale(.6)", opacity: 0 }, { transform: "translateY(-70px) scale(1.2)", opacity: 1 }, { transform: "translateY(-135px) scale(.6)", opacity: 0 }], { duration: 1200, easing: "ease-out" });
+          document.body.appendChild(heart); setTimeout(() => heart.remove(), 1250);
+        }
+      }
+      $("#letterOverlay").classList.add("open");
+      beeClicks = 0;
+    }
+    function countBeeClick() {
+      beeClicks++;
+      clearTimeout(beeClickReset);
+      beeClickReset = setTimeout(() => { beeClicks = 0; }, 4500);
+      if (beeClicks >= 10) openLetterCelebration();
+    }
+    bee.addEventListener("click", countBeeClick);
+    bee.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); countBeeClick(); } });
+    $("#closeLetter").addEventListener("click", () => $("#letterOverlay").classList.remove("open"));
+    $("#letterOverlay").addEventListener("click", event => { if (event.target === $("#letterOverlay")) $("#letterOverlay").classList.remove("open"); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") $("#letterOverlay").classList.remove("open"); });
+
+    /* Пасхалка №2: кодовые слова folyix / hope */
+    let typedSecret = "";
+    let lastAchievementAt = 0;
+    const secretWords = ["folyix", "hope"];
+    function showAchievement() {
+      const now = Date.now();
+      if (now - lastAchievementAt < 3500) return;
+      lastAchievementAt = now;
+      const toast = $("#achievementToast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4200);
+      for (let i = 0; i < 9; i++) {
+        const beeFlight = document.createElement("span");
+        beeFlight.className = "flying-bee";
+        beeFlight.textContent = i % 3 === 0 ? "🐝" : "🐝";
+        beeFlight.style.setProperty("--top", `${10 + Math.random() * 76}vh`);
+        beeFlight.style.setProperty("--size", `${17 + Math.random() * 12}px`);
+        beeFlight.style.setProperty("--flight", `${4.5 + Math.random() * 2.4}s`);
+        document.body.appendChild(beeFlight);
+        beeFlight.addEventListener("animationend", () => beeFlight.remove(), { once: true });
+      }
+      $$(".relic-card, .value-card, .season-card, .story-main").forEach((card, index) => {
+        setTimeout(() => { card.classList.remove("joy-bounce"); void card.offsetWidth; card.classList.add("joy-bounce"); }, index * 45);
+      });
+      playAchievementSound();
+    }
+    document.addEventListener("keydown", event => {
+      const target = event.target;
+      const typingField = target && (target.matches("input, textarea, select") || target.isContentEditable);
+      if (typingField || event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1) return;
+      typedSecret = (typedSecret + event.key.toLowerCase()).slice(-12);
+      if (secretWords.some(word => typedSecret.endsWith(word))) { typedSecret = ""; showAchievement(); }
+    });
+
+    /* Пасхалка №3: росток в футере — наведение, фокус или клик */
+    const sprout = $("#sproutSecret");
+    sprout.addEventListener("click", () => sprout.classList.toggle("open"));
+    sprout.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); sprout.classList.toggle("open"); } });
+
+    /* Мобильное меню */
+    $("#menuToggle").addEventListener("click", () => {
+      const open = $("#navLinks").classList.toggle("open");
+      $("#menuToggle").setAttribute("aria-expanded", String(open));
+    });
+    $$("#navLinks a").forEach(link => link.addEventListener("click", () => { $("#navLinks").classList.remove("open"); $("#menuToggle").setAttribute("aria-expanded", "false"); }));
+
+    /* Отправка заявки: демо-режим сохраняет локальный ник; реальный режим шлёт данные в Apps Script */
+    const form = $("#applicationForm");
+    const formMessage = $("#formMessage");
+    function showFormMessage(text) { formMessage.textContent = text; formMessage.classList.add("show"); }
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const application = {
+        nickname: cleanNickname(data.get("nickname")),
+        age: String(data.get("age") || "").trim(),
+        experience: String(data.get("experience") || "").trim(),
+        creator: String(data.get("creator") || "").trim(),
+        conflict: String(data.get("conflict") || "").trim()
+      };
+      if (!isValidNickname(application.nickname)) return showFormMessage("Проверь ник: используй 3–16 латинских букв, цифр или символов подчёркивания.");
+      if (!application.age || Number(application.age) < 1 || Number(application.age) > 99) return showFormMessage("Пожалуйста, укажи возраст числом от 1 до 99.");
+      if (application.experience.length < 10 || application.conflict.length < 10 || !application.creator) return showFormMessage("Ответь, пожалуйста, чуть подробнее на вопросы — так создателю будет легче познакомиться с тобой.");
+
+      const submitButton = $("#submitApplication");
+      submitButton.disabled = true; submitButton.textContent = "Отправляем…";
+      try {
+        if (!DEMO_MODE) {
+          if (!isRealBackendReady()) throw new Error("Добавь ссылку Google Apps Script в GOOGLE_SCRIPT_URL и установи DEMO_MODE = false.");
+          // text/plain — простой cross-origin запрос без предварительного CORS-запроса.
+          // Apps Script получает JSON в e.postData.contents.
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({ action: "submit", application })
+          });
+        }
+        savePlayer({ nickname: application.nickname, status: "pending" });
+        renderStatus({ nickname: application.nickname, status: "pending" });
+        if (DEMO_MODE) showFormMessage("Демо-заявка сохранена только в этом браузере. Подключи Google Таблицу, чтобы принимать реальные заявки.");
+      } catch (error) {
+        console.error(error);
+        showFormMessage(error.message || "Не удалось отправить заявку. Проверь подключение и попробуй ещё раз.");
+      } finally {
+        submitButton.disabled = false; submitButton.innerHTML = 'Отправить заявку <span>→</span>';
+      }
+    });
+
+    /* Режим демонстрации: меняем статус на кнопках — удобно проверить все три варианта */
+    $$("[data-demo-status]").forEach(button => button.addEventListener("click", () => {
+      if (!DEMO_MODE) return;
+      const player = loadPlayer();
+      if (player) renderStatus({ nickname: player.nickname, status: button.dataset.demoStatus });
+    }));
+    $("#reapplyBtn").addEventListener("click", () => showFormAgain());
+
+    /* Копирование IP */
+    $("#copyIpBtn").addEventListener("click", async () => {
+      const value = $("#serverIpText").textContent;
+      if (!value || value.includes("будет объявлен")) return;
+      try {
+        await navigator.clipboard.writeText(value);
+        $("#copyIpBtn").textContent = "Скопировано ✓";
+        setTimeout(() => $("#copyIpBtn").textContent = "Копировать", 1600);
+      } catch (error) {
+        const temporary = document.createElement("textarea"); temporary.value = value; document.body.appendChild(temporary); temporary.select();
+        document.execCommand("copy"); temporary.remove();
+        $("#copyIpBtn").textContent = "Скопировано ✓";
+        setTimeout(() => $("#copyIpBtn").textContent = "Копировать", 1600);
+      }
+    });
+
+    /* Проверка статуса по нику с любого устройства.
+       Сначала пробуем fetch; если браузер блокирует CORS — используем JSONP.
+       Google Apps Script возвращает через JSONP только ник и статус, не ответы анкеты. */
+    function jsonpStatusRequest(nickname) {
+      return new Promise((resolve, reject) => {
+        const callbackName = `folyixStatus_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+        const script = document.createElement("script");
+        const timer = setTimeout(() => { cleanup(); reject(new Error("Время ожидания проверки истекло.")); }, 9000);
+        function cleanup() { clearTimeout(timer); delete window[callbackName]; script.remove(); }
+        window[callbackName] = result => { cleanup(); resolve(result); };
+        script.onerror = () => { cleanup(); reject(new Error("Не удалось связаться с таблицей. Попробуй позже.")); };
+        const url = new URL(GOOGLE_SCRIPT_URL);
+        url.searchParams.set("action", "status");
+        url.searchParams.set("nickname", nickname);
+        url.searchParams.set("callback", callbackName);
+        script.src = url.toString();
+        document.body.appendChild(script);
+      });
+    }
+    function renderLookupStatus(target, nickname, status) {
+      const safeStatus = STATUS_TEXT[status] ? status : "pending";
+      const details = STATUS_TEXT[safeStatus];
+      target.replaceChildren();
+      const badge = document.createElement("span");
+      badge.className = `status-badge ${details.className}`;
+      badge.textContent = details.label;
+      const title = document.createElement("strong");
+      title.textContent = `${nickname}: `;
+      const message = document.createElement("span");
+      message.textContent = details.text;
+      target.append(title, badge, document.createElement("br"), message);
+
+      if (safeStatus === "approved") {
+        const approved = document.createElement("div");
+        approved.className = "approved-box show";
+        const heading = document.createElement("h4");
+        heading.textContent = "Добро пожаловать в FOLYIX! 🎉";
+        const ipRow = document.createElement("div");
+        ipRow.className = "server-ip";
+        const ipText = document.createElement("span");
+        const configuredIp = SERVER_IP && !SERVER_IP.includes("СКОРО_") ? SERVER_IP : "IP будет объявлен отдельно";
+        ipText.textContent = configuredIp;
+        const copy = document.createElement("button");
+        copy.type = "button";
+        copy.className = "copy-btn";
+        copy.textContent = "Копировать";
+        copy.addEventListener("click", async () => {
+          if (configuredIp.includes("будет объявлен")) return;
+          try { await navigator.clipboard.writeText(configuredIp); }
+          catch (error) {
+            const temp = document.createElement("textarea");
+            temp.value = configuredIp;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand("copy");
+            temp.remove();
+          }
+          copy.textContent = "Скопировано ✓";
+          setTimeout(() => copy.textContent = "Копировать", 1600);
+        });
+        ipRow.append(ipText, copy);
+        const pack = document.createElement("a");
+        pack.className = "pack-btn";
+        pack.textContent = "⬇ Скачать ресурспак";
+        if (RESOURCE_PACK_URL && !RESOURCE_PACK_URL.includes("СЮДА_")) {
+          pack.href = RESOURCE_PACK_URL;
+          pack.target = "_blank";
+          pack.rel = "noopener";
+        } else {
+          pack.href = "#";
+          pack.style.opacity = ".55";
+          pack.style.pointerEvents = "none";
+        }
+        approved.append(heading, ipRow, pack);
+        target.append(approved);
+      }
+    }
+
+    async function getRemoteStatus(nickname) {
+      const url = new URL(GOOGLE_SCRIPT_URL);
+      url.searchParams.set("action", "status");
+      url.searchParams.set("nickname", nickname);
+      try {
+        const response = await fetch(url.toString(), { method: "GET", cache: "no-store" });
+        if (!response.ok) throw new Error("Ошибка ответа сервера");
+        return await response.json();
+      } catch (error) {
+        return await jsonpStatusRequest(nickname);
+      }
+    }
+
+    $("#lookupForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const nickname = cleanNickname($("#lookupNick").value);
+      const resultBox = $("#lookupResult");
+      resultBox.classList.add("show");
+      if (!isValidNickname(nickname)) { resultBox.textContent = "Проверь ник: 3–16 латинских букв, цифр или подчёркиваний."; return; }
+      resultBox.textContent = "Ищем твою заявку… 🌿";
+      try {
+        if (DEMO_MODE) {
+          const local = loadPlayer();
+          if (local && local.nickname.toLowerCase() === nickname.toLowerCase()) {
+            renderLookupStatus(resultBox, local.nickname, local.status);
+          } else {
+            resultBox.textContent = "В демо-режиме можно проверить только ник, сохранённый в этом браузере. Подключи Google Таблицу для проверки с любого устройства.";
+          }
+          return;
+        }
+        if (!isRealBackendReady()) throw new Error("Сначала укажи URL Google Apps Script в настройках сайта.");
+        const result = await getRemoteStatus(nickname);
+        if (!result || !result.found) { resultBox.textContent = "Заявка с таким ником не найдена. Проверь написание или подай заявку выше."; return; }
+        const status = ["pending", "approved", "rejected"].includes(result.status) ? result.status : "pending";
+        renderLookupStatus(resultBox, result.nickname || nickname, status);
+        const saved = loadPlayer();
+        if (saved && saved.nickname.toLowerCase() === nickname.toLowerCase()) renderStatus({ nickname: saved.nickname, status });
+      } catch (error) {
+        console.error(error);
+        resultBox.textContent = error.message || "Не удалось проверить статус. Попробуй ещё раз позже.";
+      }
+    });
+
+    /* При повторном заходе показываем сохранённую карточку */
+    $("#capacityCount").textContent = String(MAX_PLAYERS);
+    const returningPlayer = loadPlayer();
+    if (returningPlayer && returningPlayer.nickname) renderStatus(returningPlayer);
+
+    /* Если в настройках демо отключили, не показываем тестовые кнопки */
+    if (!DEMO_MODE) $("#demoControls").style.display = "none";
+  </script>
+</body>
+</html>
